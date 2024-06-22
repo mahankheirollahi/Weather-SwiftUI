@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+let weatherModels: [WeatherModel] = [
+    WeatherModel(dayWeek: "TUE", imageName: "cloud.sun.fill", temperature: 76),
+    WeatherModel(dayWeek: "WED", imageName: "sun.max.fill", temperature: 88),
+    WeatherModel(dayWeek: "THU", imageName: "wind.snow", temperature: 55),
+    WeatherModel(dayWeek: "FRI", imageName: "sunset.fill", temperature: 60),
+    WeatherModel(dayWeek: "SAT", imageName: "snow", temperature: 25),
+]
+
 struct ContentView: View {
     @State private var isNight = false
     var body: some View {
@@ -18,21 +26,10 @@ struct ContentView: View {
                 MainWeatherView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill", temperature: 76)
                 
                 HStack(spacing:20){
-                    WeatherDayView(dayWeek: "TUE",
-                                   imageName: "cloud.sun.fill",
-                                   temperature: 74)
-                    WeatherDayView(dayWeek: "WED",
-                                   imageName: "sun.max.fill",
-                                   temperature: 88)
-                    WeatherDayView(dayWeek: "THU",
-                                   imageName: "wind.snow",
-                                   temperature: 55)
-                    WeatherDayView(dayWeek: "FRI",
-                                   imageName: "sunset.fill",
-                                   temperature: 60)
-                    WeatherDayView(dayWeek: "SAT",
-                                   imageName: "snow",
-                                   temperature: 25)
+                    ForEach(weatherModels) { model in
+                                   WeatherDayView(weatherModel: model)
+                    }
+
                 }
                 Spacer()
                 Button{
@@ -55,21 +52,19 @@ struct ContentView: View {
 }
 
 struct WeatherDayView: View {
-    var dayWeek: String
-    var imageName: String
-    var temperature: Int
+    let weatherModel: WeatherModel
     
     var body: some View {
         VStack{
-            Text(dayWeek)
+            Text(weatherModel.dayWeek)
                 .font(.system(size: 16,weight: .medium))
                 .foregroundStyle(.white)
-            Image(systemName: imageName)
+            Image(systemName: weatherModel.imageName)
                 .renderingMode(.original)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 40,height: 40)
-            Text("\(temperature)°")
+            Text("\(weatherModel.temperature)°")
                 .font(.system(size: 28,weight: .medium))
                 .foregroundStyle(.white)
         }
